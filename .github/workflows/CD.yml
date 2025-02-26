@@ -31,4 +31,4 @@ jobs:
 
             - name: Restart application
               run: |
-                  sudo systemctl restart nginx
+                  pm2 restart nginx-restart
