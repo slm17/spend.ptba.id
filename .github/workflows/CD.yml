@@ -1,0 +1,34 @@
+name: CD
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    deploy:
+        runs-on: self-hosted # Gunakan self-hosted runner
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Install dependencies
+              run: |
+                  cd ~/spend.ptba.id
+                  git fetch origin main
+                  git reset --hard origin/main
+                  npm install
+
+            - name: Build application
+              run: |
+                  cd ~/spend.ptba.id
+                  npm run build
+
+            - name: Deploy application
+              run: |
+                  sudo cp -r ~/spend.ptba.id/dist/* /var/www/spend.ptba.id/
+
+            - name: Restart application
+              run: |
+                  pm2 restart nginx
